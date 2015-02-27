@@ -3,7 +3,7 @@ require 'rubygems/package_task'
 
 spec = Gem::Specification.new do |s|
   s.name = "hiera-s3"
-  s.version = "0.1.0"
+  s.version = "0.2.0"
   s.author = "codwazny"
   s.email = "sidekicksellout@gmail.com"
   s.homepage = "https://github.com/codwazny/hiera-s3/"
@@ -12,7 +12,7 @@ spec = Gem::Specification.new do |s|
   s.files = FileList["lib/**/*"].to_a
   s.require_path = "lib"
   s.has_rdoc = true
-  s.add_dependency 'aws-sdk', ['>=1.22.1']
+  s.add_dependency 'aws-sdk-v1', ['>=1.22.1']
 end
 
 Gem::PackageTask.new(spec) do  |pkg|

@@ -5,7 +5,7 @@ class Hiera
         class S3_backend
             def initialize
                 require 'rubygems'
-                require 'aws-sdk'
+                require 'aws-sdk-v1'
                 require 'yaml'
                 Hiera.debug("S3_backend initialized")
             end
