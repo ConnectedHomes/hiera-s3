@@ -27,7 +27,8 @@ class Hiera
                     options[:encryption_key] = IO.read(Config[:s3][:encryption_key_path]).strip
                 end
                 answer = nil
-                Hiera.debug("S3_backend using bucket: #{Config[:s3][:bucket]}")
+                s3bucket = Backend.parse_string("#{Config[:s3][:bucket]}", scope)
+                Hiera.debug("S3_backend using bucket: #{s3bucket}")
                 Backend.datasources(scope, order_override) do |source|
                     # combine the source and the key to get the path
                     path = File.join(source, key)
@@ -35,7 +36,7 @@ class Hiera
                     # get data from the specified path
                     bucket_data = nil
                     begin
-                        bucket_data = s3.buckets[Config[:s3][:bucket]].objects[path].read(options)
+                        bucket_data = s3.buckets[s3bucket].objects[path].read(options)
                     rescue
                     end
                     # bucket_data is nil if the key is not found
@@ -43,7 +44,7 @@ class Hiera
                     Hiera.debug("Found #{key} in #{source}")
                     Hiera.debug("Raw data: #{bucket_data}")
                     # if YAML detected, parse as YAML
-                    bucket_data = YAML.load(bucket_data) if !!bucket_data[/^---[^-]/m] 
+                    bucket_data = YAML.load(bucket_data) if !!bucket_data[/^---[^-]/m]
                     new_answer = Backend.parse_answer(bucket_data, scope)
                     Hiera.debug("YAML-parsed data: #{new_answer}")
                     case resolution_type
